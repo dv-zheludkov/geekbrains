@@ -1,8 +1,8 @@
 -- MySQL dump 10.13  Distrib 8.0.23, for macos10.15 (x86_64)
 --
--- Host: 127.0.0.1    Database: conceptaculum
+-- Host: localhost    Database: conceptaculum
 -- ------------------------------------------------------
--- Server version	8.0.23-0ubuntu0.20.04.1
+-- Server version	8.0.23
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -24,7 +24,9 @@ DROP TABLE IF EXISTS `access`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `access` (
   `general_id` bigint unsigned NOT NULL,
-  `user_id` bigint unsigned NOT NULL
+  `user_id` bigint unsigned NOT NULL,
+  KEY `access_general_id_IDX` (`general_id`) USING BTREE,
+  KEY `access_user_id_IDX` (`user_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -71,7 +73,9 @@ DROP TABLE IF EXISTS `actors_links`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `actors_links` (
   `general_id` bigint unsigned NOT NULL,
-  `actors` int unsigned NOT NULL
+  `actors_id` int unsigned NOT NULL,
+  KEY `actors_links_general_id_IDX` (`general_id`) USING BTREE,
+  KEY `actors_links_actors_id_IDX` (`actors_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -118,7 +122,9 @@ DROP TABLE IF EXISTS `authors_links`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `authors_links` (
   `general_id` bigint unsigned NOT NULL,
-  `authors_id` int unsigned NOT NULL
+  `authors_id` int unsigned NOT NULL,
+  KEY `authors_links_general_id_IDX` (`general_id`) USING BTREE,
+  KEY `authors_links_authors_id_IDX` (`authors_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -164,7 +170,9 @@ DROP TABLE IF EXISTS `category_tags`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `category_tags` (
   `category_id` int unsigned NOT NULL,
-  `general_id` bigint unsigned NOT NULL
+  `general_id` bigint unsigned NOT NULL,
+  KEY `category_tags_category_id_IDX` (`category_id`) USING BTREE,
+  KEY `category_tags_general_id_IDX` (`general_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -187,13 +195,13 @@ DROP TABLE IF EXISTS `general`;
 CREATE TABLE `general` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `desc` bigint unsigned NOT NULL,
+  `desc` text NOT NULL,
   `type` int unsigned NOT NULL,
   `added_by_user` bigint unsigned NOT NULL,
   `published_by` year NOT NULL,
   `lang` int unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -202,7 +210,31 @@ CREATE TABLE `general` (
 
 LOCK TABLES `general` WRITE;
 /*!40000 ALTER TABLE `general` DISABLE KEYS */;
+INSERT INTO `general` VALUES (1,'Библия MySQL','Толстый учебник',1,1,2021,1);
 /*!40000 ALTER TABLE `general` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `general_links`
+--
+
+DROP TABLE IF EXISTS `general_links`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `general_links` (
+  `general_id` bigint unsigned NOT NULL,
+  `link` text NOT NULL,
+  KEY `general_links_general_id_IDX` (`general_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `general_links`
+--
+
+LOCK TABLES `general_links` WRITE;
+/*!40000 ALTER TABLE `general_links` DISABLE KEYS */;
+/*!40000 ALTER TABLE `general_links` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -238,7 +270,9 @@ DROP TABLE IF EXISTS `likes`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `likes` (
   `general_id` bigint unsigned NOT NULL,
-  `user_id` bigint unsigned NOT NULL
+  `user_id` bigint unsigned NOT NULL,
+  KEY `likes_general_id_IDX` (`general_id`) USING BTREE,
+  KEY `likes_user_id_IDX` (`user_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -262,7 +296,10 @@ CREATE TABLE `notes` (
   `general_id` bigint unsigned NOT NULL,
   `user_id` int unsigned NOT NULL,
   `note` text NOT NULL,
-  `private_id` tinyint(1) NOT NULL DEFAULT '1'
+  `private_id` tinyint(1) NOT NULL DEFAULT '1',
+  KEY `notes_general_id_IDX` (`general_id`) USING BTREE,
+  KEY `notes_user_id_IDX` (`user_id`) USING BTREE,
+  KEY `notes_general_user_id_IDX` (`general_id`,`user_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -308,7 +345,9 @@ DROP TABLE IF EXISTS `performers_links`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `performers_links` (
   `general_id` bigint unsigned NOT NULL,
-  `performers_id` int unsigned DEFAULT NULL
+  `performers_id` int unsigned DEFAULT NULL,
+  KEY `performers_links_general_id_IDX` (`general_id`) USING BTREE,
+  KEY `performers_links_performers_id_IDX` (`performers_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -378,7 +417,9 @@ CREATE TABLE `series_links` (
   `prev_id` bigint unsigned DEFAULT NULL,
   `general_id` bigint unsigned NOT NULL,
   `next_id` varchar(100) DEFAULT NULL,
-  `series_id` int unsigned NOT NULL
+  `series_id` int unsigned NOT NULL,
+  KEY `series_links_general_id_IDX` (`general_id`) USING BTREE,
+  KEY `series_links_series_id_IDX` (`series_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -424,7 +465,9 @@ DROP TABLE IF EXISTS `unlikes`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `unlikes` (
   `general_id` bigint unsigned NOT NULL,
-  `user_id` bigint unsigned NOT NULL
+  `user_id` bigint unsigned NOT NULL,
+  KEY `unlikes_general_id_IDX` (`general_id`) USING BTREE,
+  KEY `unlikes_user_id_IDX` (`user_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -451,10 +494,10 @@ CREATE TABLE `users` (
   `birthday` date NOT NULL,
   `created_by` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_by` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `last_logged_by` datetime NOT NULL,
+  `last_logged_by` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_id_IDX` (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -463,6 +506,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'Дмитрий','Первый','1974-12-20','2021-04-18 22:10:25','2021-04-18 22:10:25',NULL),(2,'Николай','Второй','1979-02-21','2021-04-18 22:11:35','2021-04-18 22:11:35',NULL),(3,'Александр','Третий','1983-04-13','2021-04-18 22:12:27','2021-04-18 22:12:27',NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -479,4 +523,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-16 17:05:40
+-- Dump completed on 2021-04-18 22:47:14
