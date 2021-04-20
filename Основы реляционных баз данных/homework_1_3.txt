@@ -1,0 +1,9 @@
+1. 
+По структуре все понятно
+
+2. Таблица лайков для сообщений
+
+CREATE TABLE likes (
+	user_id INT UNSIGNED NOT NULL,
+	post_id INT UNSIGNED NOT NULL,
+	PRIMARY KEY (user_id, post_id));

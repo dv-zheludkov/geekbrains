@@ -1,0 +1,20 @@
+
+
+SELECT users.id,users.name 
+FROM orders
+	LEFT JOIN users ON (users.id=orders.user_id)
+GROUP by user_id
+;
+
+
+
+SELECT products.name,catalogs.name FROM products
+	LEFT JOIN catalogs ON (products.catalog_id=catalogs.id)
+;
+
+
+
+SELECT flights.id, c1.name as `from`, c2.name as `to` FROM flights
+	LEFT JOIN cities as c1 ON (c1.label = flights.`from`)
+	LEFT JOIN cities as c2 ON (c2.label = flights.`to`)
+;
