@@ -1,0 +1,71 @@
+
+Практическое задание по теме “Оптимизация запросов”
+
+1.
+CREATE TABLE logs (
+  table_name VARCHAR(20) NOT NULL,
+  user_id INT UNSIGNED NOT NULL,
+  name VARCHAR(255),
+  created_at DATETIME DEFAULT NOW()
+) ENGINE=ARCHIVE;
+
+CREATE TRIGGER users_log AFTER INSERT ON users FOR EACH ROW
+  INSERT INTO logs 
+    SET 
+      table_name = 'users',
+      user_id = NEW.id,
+      name = NEW.name;
+
+CREATE TRIGGER catalogs_log AFTER INSERT ON catalogs FOR EACH ROW
+  INSERT INTO logs 
+    SET 
+      table_name = 'catalogs',
+      user_id = NEW.id,
+      name = NEW.name;
+
+CREATE TRIGGER products_log AFTER INSERT ON products FOR EACH ROW
+  INSERT INTO logs 
+    SET 
+      table_name = 'products',
+      user_id = NEW.id,
+      name = NEW.name;
+
+2.
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS one_mil$$
+CREATE PROCEDURE one_mil()
+BEGIN
+   DECLARE count INT DEFAULT 0;
+   WHILE count < 1000000 DO
+      INSERT INTO users (name, birthday_at) VALUES
+        (LEFT(UUID(), RAND()*(10-5)+5), DATE(CURRENT_TIMESTAMP - INTERVAL FLOOR(RAND() * 365) DAY)),
+      SET count = count + 1;
+   END WHILE;
+END$$
+DELIMITER;
+
+Практическое задание по теме “NoSQL”
+
+1.
+SADD ip '192.168.1.1'
+SCARD ip
+2.
+SET John email@mail.com
+SET email@mail.com Alex
+GET John
+GET email@mail.com
+3.
+shop.catalogs.insertMany( [
+      { _id: 1, name: "Боевик"},
+      { _id: 2, name: "Комедия"},
+      { _id: 3 ,name: "Мелодрама"}
+   ] );
+
+shop.products.insert({
+    name: "Крепкий орешек",
+    description: "Известный боевик с Брюсом Виллисом",
+    price: 100.00,
+    catalog: 1
+})
+
