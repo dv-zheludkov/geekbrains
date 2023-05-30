@@ -1,0 +1,33 @@
+Практическое задание по теме «Операторы, фильтрация, сортировка и ограничение»
+
+1.
+UPDATE users SET created_at = NOW() WHERE created_at = NULL; 
+UPDATE users SET updated_at = NOW() WHERE updated_at = NULL;
+
+2.
+UPDATE users SET created_at = STR_TO_DATE(created_at, '%d.%m.%Y %H:%i'); 
+UPDATE users SET updated_at = STR_TO_DATE(updated_at, '%d.%m.%Y %H:%i');
+ALTER TABLE users MODIFY created_at DATETIME DEFAULT CURRENT_TIMESTAMP; 
+ALTER TABLE users MODIFY updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+3.
+SELECT * FROM storehouses_products ORDER BY CASE WHEN value = 0 THEN TRUE ELSE FALSE END, value;
+
+4.
+SELECT * FROM users WHERE DATE_FORMAT(birthday,'%M') in ('may', 'august');
+
+5.
+SELECT * FROM catalogs WHERE id IN (5, 1, 2) ORDER BY FIELD(id, 5, 1, 2);
+
+
+Практическое задание теме «Агрегация данных»
+
+1.
+SELECT AVG(age) FROM (SELECT YEAR(CURRENT_TIMESTAMP) - YEAR(birthday) as age FROM profiles) AS Avg_age;
+
+2.
+SELECT COUNT(*) as stats from (SELECT DAYOFWEEK(CONCAT(YEAR(NOW()),'-',MONTH(birthday),'-',DAYOFMONTH(birthday))) as date from profiles) as stats where date=1;
+
+3.
+
+SELECT EXP(sum(log(value))) from table;

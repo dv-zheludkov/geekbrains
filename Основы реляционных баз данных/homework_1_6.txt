@@ -1,0 +1,40 @@
+
+
+SELECT count(*) 
+FROM message 
+WHERE 
+	from_user_id = 1 OR to_user_id = 1
+LIMIT 1
+;
+
+
+SELECT SUM(likes) 
+FROM (SELECT COUNT(*) AS likes
+	  FROM like,profile
+	  WHERE some_id = profile.user_id
+	  GROUP BY some_id
+	  ORDER BY profile.birthday DESC
+	  LIMIT 10) as countlikes
+;
+
+SELECT COUNT(*) AS likes, gender 
+FROM like, profile
+WHERE like.from_user_id = profile.user_id
+GROUP BY gender;
+
+SELECT id, SUM(acts) as acts 
+FROM 
+	(SELECT id, 0 as acts FROM user
+	UNION
+	SELECT user_id as id, count(*) as acts FROM media
+	GROUP BY user_id
+	UNION
+	SELECT from_user_id, COUNT(*) FROM like
+	GROUP BY from_user_id
+	UNION
+	SELECT from_user_id, COUNT(*) FROM message
+	GROUP BY from_user_id) AS activities
+GROUP BY id
+ORDER BY acts
+LIMIT 10
+;

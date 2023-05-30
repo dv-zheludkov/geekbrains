@@ -1,0 +1,11 @@
+Вывести материалы 2021 года издания не имеющие отрицательных лайков
+
+SELECT 
+    published_by AS "Год издания", 
+    COUNT(published_by) 
+  FROM `general` AS g
+  LEFT JOIN unlikes AS u 
+    ON g.id = u.general_id 
+    WHERE u.user_id IS NULL 
+ GROUP BY published_by 
+ ORDER BY published_by;
