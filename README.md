@@ -1,2 +1,2 @@
 # geekbrains
-Домашние задания к курсам GeekBrains
+Учебные проекты к курсам GeekBrains
